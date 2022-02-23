@@ -39,7 +39,7 @@ class _AlbumTabState extends State<AlbumTab> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => albumCubit..getAlbums(),
+      create: (_) => albumCubit,
       child: BlocBuilder<AlbumCubit, AlbumState>(builder: (context, state) {
         switch (state.status) {
           case Status.initial:

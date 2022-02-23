@@ -14,9 +14,7 @@ abstract class ApiServiceManager {
     String? body,
     Map<String, dynamic>? queryParams,
     required RequestType method,
-    // bool? bearerActive = false,
   }) async {
-    // HiveModelConstants.tokenKey
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };

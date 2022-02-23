@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'album_states.dart';
 
 class AlbumCubit extends Cubit<AlbumState> {
-  AlbumCubit() : super(const AlbumState(status: Status.initial));
+  AlbumCubit() : super(const AlbumState(status: Status.initial)) {
+    getAlbums();
+  }
 
   final DataService _dataService = DataService();
 

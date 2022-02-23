@@ -17,15 +17,13 @@ class DataService extends ApiServiceManager {
       method: RequestType.GET,
     );
 
-    if (response.statusCode == 200) {
-      var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
-      List<Album> album =
-          List<Album>.from(result.map((item) => Album.fromJson(item)).toList());
-      if (start >= album.length) return [];
-      return end > album.length
-          ? album.sublist(start, album.length)
-          : album.sublist(start, end);
-    }
+    var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
+    List<Album> album = result.map((item) => Album.fromJson(item)).toList();
+
+    if (start >= album.length) return [];
+    return end > album.length
+        ? album.sublist(start, album.length)
+        : album.sublist(start, end);
   }
 
   Future<List<Photo>?> fetchPhotos(int albumID) async {
@@ -35,12 +33,9 @@ class DataService extends ApiServiceManager {
       queryParams: {'albumId': '$albumID'},
     );
 
-    if (response.statusCode == 200) {
-      var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
-      List<Photo> album =
-          List<Photo>.from(result.map((item) => Photo.fromJson(item)).toList());
-      return album;
-    }
+    var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
+    List<Photo> album = result.map((item) => Photo.fromJson(item)).toList();
+    return album;
   }
 
   /// albumId as postId
@@ -51,11 +46,9 @@ class DataService extends ApiServiceManager {
       queryParams: {'postId': '$albumID'},
     );
 
-    if (response.statusCode == 200) {
-      var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
-      List<Comment> album = List<Comment>.from(
-          result.map((item) => Comment.fromJson(item)).toList());
-      return album;
-    }
+    var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
+    List<Comment> album = result.map((item) => Comment.fromJson(item)).toList();
+
+    return album;
   }
 }
