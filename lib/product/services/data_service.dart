@@ -11,7 +11,7 @@ import 'package:assignment/product/models/album.dart';
 class DataService extends ApiServiceManager {
   DataService() : super(baseURL: RestAPI.base.url);
 
-  Future<List<Album>?> fetchAlbums() async {
+  Future<List<Album>?> fetchAlbums({int start = 0, int end = 20}) async {
     http.Response response = await createRequestAndSend(
       endPoint: RestAPI.albums.name,
       method: RequestType.GET,
@@ -21,7 +21,10 @@ class DataService extends ApiServiceManager {
       var result = convert.json.decode(convert.utf8.decode(response.bodyBytes));
       List<Album> album =
           List<Album>.from(result.map((item) => Album.fromJson(item)).toList());
-      return album;
+      if (start >= album.length) return [];
+      return end > album.length
+          ? album.sublist(start, album.length)
+          : album.sublist(start, end);
     }
   }
 

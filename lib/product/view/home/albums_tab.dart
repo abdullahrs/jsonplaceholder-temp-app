@@ -5,13 +5,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'components/album_item.dart';
 
-class AlbumTab extends StatelessWidget {
+class AlbumTab extends StatefulWidget {
   const AlbumTab({Key? key}) : super(key: key);
+
+  @override
+  State<AlbumTab> createState() => _AlbumTabState();
+}
+
+class _AlbumTabState extends State<AlbumTab> {
+  final ScrollController _controller = ScrollController();
+  final AlbumCubit albumCubit = AlbumCubit();
+
+  int index = 20;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_controller.position.pixels >= _controller.position.maxScrollExtent) {
+        final start = index;
+        index += 20;
+        albumCubit.loadMore(start, index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AlbumCubit()..getAlbums(),
+      create: (_) => albumCubit..getAlbums(),
       child: BlocBuilder<AlbumCubit, AlbumState>(builder: (context, state) {
         switch (state.status) {
           case Status.initial:
@@ -25,6 +53,7 @@ class AlbumTab extends StatelessWidget {
             ));
           case Status.loaded:
             return ListView.builder(
+                controller: _controller,
                 itemCount: state.albums!.length,
                 itemBuilder: (context, index) {
                   return AlbumItem(state.albums![index]);
